@@ -1,0 +1,23 @@
+<% if @tasks.length == 0 %>
+    <div class="alert alert-info" role="alert">
+        All done! Why don't you add some other tasks while you're around?
+    </div>
+<% end %>
+<% @deadlines = @tasks.pluck(:deadline).uniq %>
+<% @deadlines.each do |deadline| %>
+    <div class="well" id="<%= "deadline-#{deadline}"%>">
+        <h3><%= deadline %></h3>
+        <% @tasks.where(deadline: deadline).each do |task| %>
+            <div class="row">
+                <div class="col-xs-8">
+                    <p><%= link_to task.description, task, remote: true, method: :delete, data: { confirm: 'Are you sure?'} %></p>
+                </div>
+                <div class="col-xs-4">
+                    <p class="pull-right">
+                        <%= link_to "Edit", edit_task_path(task), remote: true %>
+                    </p>
+                </div>
+            </div>
+        <% end %>
+    </div>
+<% end %>
